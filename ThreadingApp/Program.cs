@@ -9,7 +9,7 @@ namespace ThreadingApp
 {
     class Program
     {
-        static int GLOBAL_VALUE = 10;
+        static int GLOBAL_VALUE = 0;
         static readonly object locker = new object();
         static bool done;
 
@@ -38,8 +38,8 @@ namespace ThreadingApp
             t4.Join();*/
 
 
-            //t.Abort();
-            //t4.Abort();
+            t.Abort();
+            t4.Abort();
 
             System.Console.WriteLine("Main thread at the end");
             System.Console.WriteLine("Global value at the end: " + GLOBAL_VALUE);
@@ -56,18 +56,13 @@ namespace ThreadingApp
                     System.Console.WriteLine(i + " " + Thread.CurrentThread.Name);
                     Thread.Sleep(10);
 
-                    lock (locker)
+                    //lock (locker)
                     {
-                        if (!done)
-                        {
                             int tmp = GLOBAL_VALUE;
                             tmp += 1;
                             GLOBAL_VALUE = tmp;
-                            done = true;
                             System.Console.WriteLine(Thread.CurrentThread.Name + " Global value: " + GLOBAL_VALUE);
-                        }
                     }
-                    done = false;
 
                 }
                 catch (ThreadAbortException ex)
@@ -90,18 +85,13 @@ namespace ThreadingApp
                 { 
                     System.Console.WriteLine(i + " " + Thread.CurrentThread.Name);
 
-                    lock (locker)
+                    //lock (locker)
                     {
-                        if (!done)
-                        {
                             int tmp = GLOBAL_VALUE;
                             tmp -= 1;
                             GLOBAL_VALUE = tmp;
-                            done = true;
                             System.Console.WriteLine(Thread.CurrentThread.Name + " Global value: " + GLOBAL_VALUE);
-                        }
                     }
-                    done = false;
 
                 }
                 catch (ThreadAbortException ex)
